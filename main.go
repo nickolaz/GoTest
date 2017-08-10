@@ -18,9 +18,10 @@ type Page struct {
 }
 
 type Foco struct {
-	Id	int    `json:"id"`
-	Estado	int    `json:"estado"`
-	Descripcion string	`json:"descripcion"`
+	Id	string    `json:"id"`
+	Descripcion string	`json:"sensor_luz"`
+	Accion	string    `json:"accion"`
+	Fecha string    `json:"fecha"`
 }
 
 func main() {
@@ -79,13 +80,14 @@ func Estadoluz() template.HTML  {
 func GetEstado() bool{
 	//return rand.Intn(2)==1
 	var r []Foco
-	url := "http://localhost:5000/focos"
+	//url := "http://localhost:5000/focos"
+	url := "http://electronprog.com/domo/select_luces.php"
 	response, _ :=http.Get(url)
 	b,_ := ioutil.ReadAll(response.Body)
 	json.Unmarshal(b,&r)
 	for i :=0 ; i<len(r) ; i++ {
-		if (r[i].Id == 1){
-			return r[i].Estado == 1
+		if (r[i].Descripcion == "luz1"){
+			return r[i].Accion == "1"
 		}
 	}
 	return false
